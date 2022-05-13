@@ -1,0 +1,10 @@
+- hosts: localhost
+  tasks:
+  - name: install curl
+    apt:
+      update_cache: true
+      name: curl
+  - name: check phppgadmin
+    shell: curl 51.250.1.11
+  - name: check docker
+    shell: curl 51.250.1.11:8080

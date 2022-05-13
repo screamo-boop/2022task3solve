@@ -1,0 +1,65 @@
+- hosts: all
+  tasks:
+   - name: Install ufw
+     apt:
+       update_cache: true
+       name: ufw
+   - name: Allow port 22
+     ufw:
+       rule: allow
+       port: 22
+       proto: tcp
+   - name: Allow port 80
+     ufw:
+       rule: allow
+       port: 80
+       proto: tcp
+   - name: Allow port 8080
+     ufw:
+       rule: allow
+       port: 8080
+       proto: tcp
+   - name: Allow port 1834
+     ufw:
+       rule: allow
+       port: 1834
+       proto: tcp
+   - name: Allow port 1337
+     ufw:
+       rule: allow
+       port: 1337
+       proto: tcp
+   - name: Allow port 123
+     ufw:
+       rule: allow
+       port: 123
+       proto: tcp
+   - name: activate ufw
+     ufw:
+       state: enabled
+       policy: allow
+   - name: Create user
+     user:
+       name: 'ansibleuser'
+       password: '$6$2iSkWBfc$1JB.WWVRCm0FWxEflVPCzb68l3LY78wu5Be.A5LtGOjutEz7XIQ7nRu47FywdnOC7OKxJFI4CTTJv3LksEUog/'
+       shell: /bin/bash
+   - name: install docker
+     apt:
+       pkg:
+         - docker
+         - docker.io
+         - docker-compose
+   - name: copy compose
+     copy:
+       src: docker-compose.yml
+       dest: /root/docker-compose.yml
+   - name: start compose
+     shell: cd /root; docker-compose up -d
+   - name: copy docker app
+     copy:
+       src: app.tar
+       dest: /root/app.tar
+   - name: load docker app
+     shell: docker load < /root/app.tar
+   - name: start docker app
+     shell: docker run -d --name app -p 8080:4444 app:firstver

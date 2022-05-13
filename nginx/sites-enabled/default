@@ -1,0 +1,6 @@
+server {
+	listen 4444;
+	server_name _;
+	root /var/www/html;
+	index index.html;
+}
